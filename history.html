@@ -1,0 +1,891 @@
+<HTML>
+<HEAD>
+<TITLE>TigerLily: Feelin' Free!</TITLE>
+</HEAD>
+<BODY bgcolor=white>
+[ <A HREF="index.html">Back to the Front</A> | 
+<A HREF="mailto:tigerlily@hitchhiker.org">Mail the Maintainers</A> ]
+
+<HR>
+<B><A HREF="tlily-2.4.tar.gz">Version 2.4</A></B> (Nov 03, 2003)<BR>
+<UL>
+
+<LI> [Makefile.PL] Revamped build system.
+<LI> [extensions/infobot.pl] Tlily-based infobot [JDW]
+<LI> [extensions/group.pl] Reformat group info [WJC]
+<LI> [extensions/dontcare.pl] New extension to chop a given user's sends
+    if they exceed a certain length.
+<LI> [extensions/mask.pl] Mask a user to a group name; useful for people
+    who change pseodos frequently. [WJC]
+<LI> [extensions/osxspeak.pl] OS/X analog of win32speak.pl [WJC]
+<LI> [TLily/UI/Curses] Added "intelligent" input history browsing, allowing
+    to move line-by-line within a multi-line send. [DPN]
+<LI> [TLily/Server/SLCP.pm] Fixed expansion problems when a user /renames
+    from a name similar to a discussion name. [SMC]
+<LI> [TLily/Server/SLCP.pm,extension/slcp_state.pl] Tigerlily now notices
+    discussion destruction, and removes their names from its database. [SMC]
+<LI> [TLily/Server/SLCP.pm] Added support for '~' to match only users. [SMC]
+<LI> [extensions/keepalive.pl] When re-connecting to a lost connection, fixed
+    bug that prevented keepalive pings. [SMC]
+<LI> [extensions/keepalive.pl] keepalive now uses the proper OOB ping, instead
+    of /why [JDW]
+<LI> [extensions/gag.pl] Add '%gag topic <foo>', which will gag based on the
+    content of sends instead of the sender.
+<LI> [TLily/UI/Curses.pm,TLily/UI/Curses/StatusLine.pm,TLily/UI/Curses/Text.pm,
+     extensions/ui.pl] Allow the text window to be split into multiple
+     subwindows. [BEW]
+<LI> [extensions/status.pl] If $clockseconds is set, the statusline clock
+    will display seconds. [BEW]
+<LI> [TLily/UI/Curses/StatusLine.pm] When the window's width is changed,
+    redraw the status line correctly. [BEW]
+<LI> [TLily/UI/Curses.pm] Fix for window resizing from Mike Sawyer. [DPN]
+<LI> [extensions/autohere.pl] Added autohere, which will automatically
+    '/here' the user when they send a message.
+<LI> [tlily.global] Set max_scrollback to 10000 by default. [DPN]
+<LI> [extensions/on.pl] Changed %on behavior to be compatible with what
+    it used to be: the default for the notify flag is now 'always'. [DPN]
+<LI> [extensions/namethatblurb.pl] Added the amazingly silly namethatblurb
+    extension, which prints the appropriate blurb when it sees "<name>'s
+    blurb" in a send. [DPN]
+<LI> [extensions/on.pl]  Added new flag to %on: 'notify (yes|no|always)',
+    which marks whether %on should trigger based on the event's notify
+    status (must be on, must be off, doesn't matter). [RBJ]
+<LI> [TLily/UI/Curses/Input.pm] Bugfix: spurious ^s should no longer appear
+    in the input area. [DPN]
+<LI> [TLily/UI/*] Restructured the Curses UI into a generic "TextWindow" UI
+    and a mediation layer called "FoiledAgain".  Provided a FoiledAgain
+    backends for Curses and Win32::Console, which now work identically.  [JDW]
+<LI> Made tlily work well with a vanilla activestate [win32] perl installation,
+    without additional modules or cygwin.  This will become the preferred
+    way to run tlily on win32, and should be much more reliable than the
+    cygwin/curses-based version. [JDW]
+</UL>
+
+<HR>
+<B><A HREF="tlily-2.3.tar.gz">Version 2.3</A></B> (Dec 04, 2001)<BR>
+<UL>
+
+<LI> [extensions/url.pl] Multiline URIs in /review, /memo and /info should be
+    correctly assembled now much more than they were, though URIs that end
+    exactly at the end of the line now will be wrong.  Since they are
+    pretty rare compared to wrapped URIs, it seemed a fair trade-off. [DCL]
+<LI> [extensions/ui.pl] kill-sentence, as in Emacs, bound to M-k. [DCL]
+<LI> [extensions/ui.pl] zap-to-char, as in Emacs, bound to M-z. [DCL]
+<LI> [TLily/UI/Curses.pm,extensions/leet.pl,extensions/paste.pl,
+    extensions/ui.pl] Now you *can* have your multiline paste leet'd,
+    but if you do we will find you and kill you.  Key command intercepts
+    are now a list internally rather than a single item, so various
+    modes are not mutually exclusive. [DCL]
+<LI> [extensions/leet.pl,extensions/paste.pl,extensions/ui.pl] leet-mode,
+    paste-mode and input-search-mode all ignored the return value of
+    intercept_u, so they didn't detect failure to enter their mode because
+    of already being in another mode.  (You can't have your multiline paste
+    leet'd.  Oh darn.) [DCL]
+<LI> [extensions/keepalive.pl] keepalive will now try to keep all connected
+    servers alive, not just the one focused when the interval expires. [DCL]
+<LI> [TLily/Server/SLCP.pm] During startup, some server output would be
+    inadvertently lost because a text event handler was stopping processing of
+    all text that did not match what it was looking for. [DCL]
+<LI> [Makefile.PL] Detect the presence of Curses or Tk support at build time
+    to determine which UIs to include, or fail if neither Curses nor Tk is
+    available. [DCL]
+<LI> [TLily/Event.pm] Show named event registration/reception/deregistration
+    based on the setting of event_debug, which is interpreted as a regular
+    expression matched against a string that is the event type followed by
+    the file name the handler was established in.  For example, starting
+    tlily with "-send_debug=blurbless" will cause blurbless.pl's registration
+    (and subsequent call) of a 'server_connected' handler to be matched
+    against the string "server_connected:during extensions/blurbless.pl". [DCL]
+<LI> [TLily/Event.pm] Registering a named event handler from within a handler 
+    could cause erroneously repeated handler execution (and perhaps not run
+    some, but I haven't really thought about that possibility much).
+<LI> [TLily/Server.pm] Show all data sent to server if send_debug is set. [DCL]
+<LI> [extensions/startup.pl] Startup file/memo processing would send extraneous
+    (harmless) empty lines to the server.  [DCL]
+<LI> [TLily/ExoSafe.pm] Add a __FILE__ identifier to each compartment
+    to make finding the source of an eval (eg, an event handler) easier. [DCL]
+<LI> [extensions/blurbless.pl] Changed the handlers around a little so
+    that a server_connected event triggers registering of the text/prompt
+    handlers, allowing blurbless to work for connections beyond the first one.
+<LI> [extensions/autoreview.pl] Don't unregister the connected_handler, so
+    that autoreview will work for connections beyond the first one.
+<LI> [extensions/multicore.pl] Add support for @SERVER/Command and 
+    */Command [WJC]
+<LI> [extensions/blurb.pl] changed config var to server_all, added support
+    for %here, %away [WJC]
+<LI> [TLily/Server/SLCP.pm, extensions/expand.pl] Fixed up a few bugs in
+    multiserver expand.  Always add the @Server when expanding to a target
+    which exists on multiple servers.  [DPN]
+<LI> [tlily.PL] Use current perl when calling find_eagain.  [DPN]
+<LI> [tlily.global] Changed default server to "rpi.lily.org".  [DPN]
+<LI> [README] Added an example to (hopefully) clarify .cf usage. [WJC]
+<LI> [TLily/Server.pm] Fixed error reporting on failed server connect.  [DPN]
+<LI> [extension/after.pl] PR # 844 [WJC]
+<LI> [extensions/set.pl] Added config var help [WJC]
+<LI> [extensions/expand.pl] Fixed up tab-expansion to work with
+    multiserver names. [DPN]
+<LI> [TLily/Server/SLCP.pm] Added 'save_crufty_renames' knob to preserve
+    the old, broken behavior on renames.  This feature is intentionally
+    undocumented. [DPN]
+<LI> [TLily/Server/SLCP.pm] When a user renamed, the entry for their old
+    name was not correctly deleted.  Fixed. [DPN]
+<LI> [TLily/UI/Curses/Text.pm] Added scrollback expiration.  There may still
+    be some bugs in it; use with caution.  It is controlled by the
+    'max_scrollback' variable. [RBJ]
+<LI> [TLily/UI/Curses.pm] Fixed resize bug (PR#550).  Finally.  [RBJ]
+</UL>
+
+<HR>
+<B><A HREF="tlily-2.2.tar.gz">Version 2.2</A></B> (Jan 25, 2001)<BR>
+<UL>
+  <LI> [everything] Updated hostnames and copyright dates. [DPN]
+  <LI> [extensions/program.pl] Fixed PR#848 &amp; 850 (reedit &amp; indented comments)[CWS]
+  <LI> [extensions/gag.pl] Added rudimentary support for %gag &lt;group&gt; [WJC]
+  <LI> [extensions/server.pl] Fixed PR#812 (error msg on invalid core) [WJC]
+  <LI> [Makefile.PL, tlily.PL, TLily/Config.pm, TLily/ExoSafe.pm, TLily/Extend.pm,
+    TLily/User.pm] Changed build system; the new one has less features,
+    but builds tlily as a single, movable file. [DPN]
+  <LI> [extensions/blurb.pl] Removed #@$#@ filter, added multi-server support [WJC]
+  <LI> [extensions/slcp_output.pl,extensions/ui.pl,tlily.global]  Add new
+    styles to tag server names in pub,priv,emote messages. [RBJ]
+  <LI> [extensions/stripper.pl] Strip leading spaces from input sent to server.
+  <LI> [extensions/source.pl] You can source memos now. [WJC]
+  <LI> [extensions/url.pl] Add regex support to %url show; '%url show &lt;regex&gt;'
+    will now show the last URL matching the regex. [RBJ]
+  <LI> [extensions/blurb.pl] New extension, auto-blurb-compression [WJC]
+  <LI> [extensions/http_parse.pl] Merged changes from http2_parse back in [WJC]
+  <LI> [extensions/http2_parse.pl] Deleted, merged back into http_parse [WJC]
+  <LI> [TLily/Server/HTTP.pm] bugfix + addition of callback, used by the 
+    http2 "protocol" [WJC]
+  <LI> [extensions/http2_parse.pl] Added another httpd parsing mechanism 
+    that stores the web page in memory rather than dumping it to a file. [WJC]
+  <LI> [extensions/pinhead.pl] Updated tlily1.x print call [WJC]
+  <LI> [extensions/gag.pl] Updated tlily1.x print call [WJC]
+  <LI> [extensions/misc.pl] New config vars to help suppress output [WJC]
+  <LI> [extensions/after.pl] Added support for multi-line commands [WJC]
+  <LI> [extensions/keepalive.pl] Added help for vars. [WJC]
+  <LI> [extensions/stock.pl] Rewrite, removed dep on 'wget', uses config vars 
+    now [WJC]
+  <LI> [extensions/xmms.pl] Fixes, added ability to play a URL. [MJR]
+  <LI> [extensions/xmms.pl] New extension; allows user to control Xmms from
+    within tlily. [WJC]
+  <LI> [TLily/User.pm] Fixed so that the POD indexer only looks at files ending
+    in .pl, .pm, or .pod. [MJR]
+  <LI> [extensions] Added POD docs to more extensions. [MJR]
+  <LI> [UI/Tk] Added dump_to_file method for %dumpscrollback. [CWS]
+  <LI> [UI] Added %dumpscrollback, which lets you dump the scrollback buffer to 
+    a file. [JDW]
+  <LI> [tlily.PL, extensions/on.pl] Changed the formatting of SLCP sends to
+    allow event attributes to modify presentation.  [RBJ]
+  <LI> [extensions/slcp_output.pl] Changed the formatting of sends to allow
+    event attributes to modify presentation.  [DPN]
+  <LI> [extensions/on.pl] Added the ability to set event attributes from a
+    %on handler.  [DPN]
+  <LI> [tlily.global, extensions/blurbless.pl] New extension.  If
+    $config{enter_blurbless} is true, automatically bypass the "please
+    enter a blurb" prompt with no blurb. [DCL]
+  <LI> [TLily/UI/Curses/Text.pm] Default pager value for text widget set based
+    on $config{page}. [DCL]
+  <LI> [extensions/keepalive.pl] Changing $config{keepalive_interval}
+    after keepalive is loaded now affects the working interval. [DCL]
+  <LI> [tlily.global, TLily/UI/Curses.pm, extensions/ui.pl] New function,
+    mark_output, by default bound to M-m.  Used to print a blank line to the
+    screen, so you can mark where you have read up to. [DCL]
+  <LI> [extensions/ui.pl, TLiLy/UI/Curses/Input.pm] Include the current input
+    line in an isearch.   Save the prefix string before searching.
+    Also fixed a bug where the entered line was being appended to history
+    even when it was identical to the previous line.  The code was clearly
+    trying to avoid this but had an off-by-one error. [DCL]
+  <LI> [TLiLy/UI/Curses/Input.pm] previous_history and next_history could
+    cause the history to become permanently edited.  New function
+    save_history_excursion retains copy of the original history entry,
+    which is restored by accept_line. [DCL]
+  <LI> [TLily/UI/Curses.pm] $config{scroll_to_bottom_on_input}, like xterm. [DCL]
+  <LI> [extensions/ui.pl, TLiLy/UI/Curses/Input.pm] Mucho hacking on the
+    search mechanism.  toggle-input-search-mode is now isearch-backward,
+    and isearch-forward was added.  Typing a key bound to backward-delete-char
+    while in input_search_mode will just erase the last character of the search
+    instead of terminating input_search_mode. C-r/C-s will look for the next
+    match in the same direction, or will switch directions.  If the
+    current search string is empty when C-r/C-s would cause a search
+    for the next match, the last search is recalled.   Typing C-g will
+    quit searching and return everything to the state it was in before
+    searching started.  C-l will refresh the screen without exiting.  Any
+    other special character exits input_search_mode, as was true before, but
+    now the history position is set based on where search stopped. Can now
+    search for the string "0"; could not before.  Case folded searching works,
+    configurable with $config{case_fold_search}. [DCL]
+  <LI> [TLily/UI/Curses/Input.pm] Even when the input string is empty,
+    accept_line now resets history position to the end, like shells do. [DCL]
+  <LI> [TLily/UI/Curses/Input.pm] Fixed a bug in search_history where the
+    search was done as regexp search but the setting of point was done
+    as a literal search. [DCL]
+  <LI> [extensions/ui.pl] Fixed bug in input_search_mode where the search
+    string would not build on the current text region if more
+    characters matched. [DCL]
+  <LI> [TLily/Event.pm] Reordered the dispatching of events so that timed
+    handlers are processed before named hanflers.  This fixes the problem
+    of named events sent by timed handlers having to wait for the select
+    loop to timeout. [CWS]
+  <LI> [TLily/Extend.pm] In load(), when testing to see if the argument
+    is an existing file, insist that a "/" be present in the name, to
+    prevent from accidentally loading a file from the directory that
+    tlily was started in if it happens to have the same name as an
+    extension.  To explicitly load a file from the current directory,
+    prepend it with "./". [DCL]
+  <LI> [TLily/UI.pm, README] Use $config{bindings} in inherit_global_bindings,
+    in addition to %gbind. [DCL]
+  <LI> [extensions/source.pl, extensions/startup.pl] '#' is now a comment
+    character when it starts a line. [DCL]
+  <LI> [extensions/url.pl] Do not bound urls with &lt;url&gt;...&lt;/url&gt;. [DCL]
+  <LI> [TLily/Server/SLCP.pm] Don't try to use $ui-&gt;print when reporting
+    an error with export if $ui is not defined. [DCL]
+  <LI> [TLily/UI.pm, TLily/UI/Curses.pm, extensions/ui.pl] %bind with
+    one argument will print the binding for the key, and with no
+    arguments will print all of the bindings. [DCL]
+  <LI> [TLily/Server/Event.pm] Configurable event_timeout. [DCL]
+  <LI> [extensions/url.pl] Capture URLs in text events (but still needs a
+    little work to figure out wrapped URLs).  Length of default list
+    configurable via $config{url_list_count}.  Format of list
+    configurable via $config{url_list_format}. [DCL]
+  <LI> [TLily/UI/Curses.pm, TLily/UI/Curses/Input.pm] backward-sentence,
+    forward-sentence, capitalize-word, down-case-word, up-case-word
+    tranpose-words and quoted insert (the last has a few problems with
+    display, but still has utility).  The sentence commands use the boolean
+    $config{doublespace_period} (default: 0) to determine whether the
+    end of a sentence should have two spaces.  The word commands use
+    $config{word_characters} (string, default "") to determine what
+    sort of characters besides alphanumerics are word characters. [DCL]
+  <LI> [extensions/startup.pl] Set no_startup_memo on the command line to not
+    attempt to find a lilyStartup memo at the server. [DCL]
+  <LI> [extensions/slcp_parse.pl] Added support for queueing %NOTIFY events
+    before the initial SLCP sync.  (No more "&gt; #1739 kills Kazrak.") [SMC]
+  <LI> extended %on to support variable expansion, unregistering and listing
+    handlers, and regexp matching. [JDW]
+</UL>
+
+<HR>
+<B><A HREF="tlily-2.1.1.tar.gz">Version 2.1.1</A></B> (Jan  7, 2000)<BR>
+<UL>
+<LI> Bugfix release - Release 2.1 had several old files that should have been included.
+</UL>
+
+<HR>
+<B><A HREF="tlily-2.1.tar.gz">Version 2.1</A></B> (Jan  4, 2000)<BR>
+<UL>
+  <LI> [TLily/UI/{Curses,Tk}.pm] Enable/disable output based on $config{quiet}. [CWS]
+  <LI> [extensions/status.pl] changed the clock format to remove the leading 0. [CWS]
+  <LI> [TLily/UI/Curses/Input.pm, extensions/ui.pl]  Added input history searching!  [MJR]
+  <LI> [TLily/UI/Curses.pm] Changed the key bindings for scroll up/down.  M-[ was a pretty bone-headed choice on my part.  They're now M-, & M-. [MJR]
+  <LI> [extensions/status.pl] Made the statusline clearly indicate when not connected to any servers. [MJR]
+  <LI> [extensions/info.pl] Added lily help editing [MJR]
+  <LI> [TLily/UI/Tk.pm] First shot at a Tk UI. [CWS]
+  <LI> [various] Fixed bug in columnize_list, converted program.pl and spellcheck.pl to use it.
+  <LI> [various] Changed calls to old cmd_process to the new per-server one.  removed Command.pm. [JDW]
+  <LI> [TLily/Config.pm] Removed old debugging print. [CWS]
+  <LI> [tlily.PL] Made loading of TLily::Bot dependent on $config{bot}. [CWS]
+  <LI> [TLily/Bot.pm] Fixed the import method to not pass the class name. [CWS]
+  <LI> [various] Added more of the multiserver stuff, especially the addition of TLily::Server::find() and TLily::Server::active(), and the complete change in behavior of TLily::Server::name().  Also moved columnize_list into TLily::Utils.  Major hacking on program.pl. [MJR]
+  <LI> [TLily/Utils.pm] New file to hold common functions, like edit_text and diff_text. [MJR]
+  <LI> [TLily/Server/SLCP.pm] Added mutli-server aware cmd_process.  May eventually remove TLily/Command.pm [MJR]
+  <LI> [extensions/slcp_parse.pl] TLily looked for %SLCP-SYNC anywhere in a line, not just at the beginning.  Fixed.  [MJR]
+  <LI> Extended TLily::Server::SLCP::fetch() to also fetch verbs, and added program.pl with verb editing [MJR]
+  <LI> Fixed the client-name-and-version-not-set problem. [CWS]
+  <LI> [TLily/Event.pm] Hopefully fixed the lost-handler bug. [CWS]
+  <LI> [TLily/Daemon/HTTP.pm]
+  <LI> [extensions/http_parse.pl] Stopped http_parse from opening a socket
+    on load. [SMC]
+  <LI> [extensions/ctc.pl] Added %ctc start and %ctc stop commands, ctc
+    module will not start daemon on load. [SMC]
+  <LI> [tlily.global] Added ctc.pl and http_parse.pl to @load [SMC]
+</UL>    
+	
+<HR>
+<B><A HREF="tlily-2.0.tar.gz">Version 2.0</A></B> (Jun 18, 1999)<BR>
+<UL>
+  <LI> Added %memo. [DPN]
+  <LI> Added GPL. [CWS, JDW]
+  <LI> New install w/ Makefile.PL (removed Build.PL) [CWS]
+  <LI> new implementation of ctc protocol [SMC]
+  <LI> spellchecker [JDW]
+  <LI> Re-integration of various things.. [JDW]
+  <LI> New UI code, event queue code, and tons of other changes [DPN]
+  <LI> SLCP, beginnings of multiserver.  Server object. [JDW]
+  <LI> Radical changes so mind-numbingly profound that they will blow your mind.
+    [ALL]
+</UL>    
+
+<HR>
+<B><A HREF="tlily-1.0.5.tar.gz">Version 1.0.5</A></B> (Jul 1, 1999)<BR>
+<UL>
+  <LI> [extensions/{biff.pl,info.pl] Fixed bugs in help text. [MJR]
+  <LI> [extensions/submit.pl] New extension for submitting bug reports [MJR]
+  <LI> [README, Build.PL] Changed occurances of einstein.to to einstein.org. [MJR]
+  <LI> [README] Added info for access to the bug tracking system [MJR]
+  <LI> [LC/Client.pm] Bugfix for tlily not reporting version to the server. [MJR]
+  <LI> [extensions/parse.pl] Bugfix for /who output and names with spaces.  [DPN]
+</UL>  
+
+<HR>
+<B><A HREF="tlily-1.0.4.tar.gz">Version 1.0.4</A></B> (Feb 2, 1999)<BR>
+<UL>
+  <LI> [extensions/parse.pl] Parser fixes to cope with the changed lily output
+    format for /who.  This should hopefully work on all servers -- it
+    autodetects based on the /who headers.  [DPN]
+  <LI> [extensions/keepalive.pl] Changes to keepalive: I think it should actually
+    work now.  [DPN]
+</UL>
+
+<hr>
+<b><a href="tlily-1.0.3.tar.gz">Version 1.0.3</a></b> (Dec 28, 1998)<br>
+<ul>
+  <li> [Build.PL] Remove lilybot on a 'perl Build.PL clean'
+  <li> [LC/CTerminal.pm] Changed the 'use POSIX' line to only include the one
+    function that I know of that we use(iscntrl). [CWS]
+  <li> [Build.PL] Modified to install the UI directory and modules. [CWS]
+  <li> [LC/Httpd.pm, extensions/httpd.pl] Http daemon using tlily internals.
+    Second stage in client-to-client communications [SMC]
+  <li> [extensions/parse.pl, LC/User.pm] First-cut attempt at handling emotes
+    as sends.  (Enabling URL parsing in emote discs.)  [DPN]
+  <li> [LC/SubClient.pm] Changed use of IO::Select to ui_select() so we don't
+    get any strange interactions between the two. [SMC]
+  <li> [LC/Bot.pm] Created, separating out the generic bot code from lilybot.PL.
+</ul>
+
+<hr>
+<b><a href="tlily-1.0.2.tar.gz">Version 1.0.2</a></b> (Nov 4, 1998)<br>
+<ul>
+  <li> [LC/UI/Native.pm] Don't replace the killbuffer with a zero-length
+    string.  (i.e., ^U when point is at the start of line shouldn't
+    update the killbuffer.)  [DPN]
+  <li> [extensions/url.pl] Made "view" a synonym for "show".  [DPN]
+  <li> [LC/UI/Native.pm] Fixed a bug which caused C-w to stop
+    working.  [DPN]
+  <li> [extensions/httpd.pl] Simple http daemon, the first stage in my
+    client-to-client communications project. [SMC]
+  <li> [LC/Extend.pm] Fixed Extend.pm again so that it exports the
+    extension_unload() function for use by extensions. [MJR]
+  <li> [LC/StatusLine.pm] Fixed a bug where if the system time got set
+    back, the statusline would not update until the time caught back
+    to where it was before. [MJR]
+  <li> [LC/UI] Added ui.pl extension and other infrastructure.  We now have
+    fully functional multi-window support in tlily!
+  <li> [LC/UI/OutputWindow]  Created a new UI module.  Sort of a "status
+    window" at this point.
+  <li> [LC/UI] Major overhaul of UI subsystem.  Created LC::UI:: modules
+    for each UI.  Also created a LC::UI::SSFE module as an example.
+  <li> [extensions/url.pl] Bugfix: Netscape doesn't like commas in arguments
+    to openURL, so replace them with %2c.  [DPN]
+  <li> [extensions/program.pl] Preliminary version of an extension for 
+    to enable server maintenance.  This version contains a very hackish
+    verb editor. [MJR]
+  <li> [LC/Extend] Modified to gracefully handle errors during extension
+    loading. [MJR]
+  <li> [extensions/url.pl] Cleaned up handling of URLs ending in punctuation.
+  <li> [extensions/url.pl] Added "tag_urls" config option to specify the
+    URL number of each captured URL.  Added support for "%url ##" where
+    ## &lt;= 0; this shows URLs off the bottom of the list.  [DPN]
+  <li> [tlily.global] Added examples for autoreview.  [DPN]
+  <li> [extensions/autoreview.pl] Added the 'autoreview' extension.  [DPN]
+  <li> [extensions/pipes.pl] Create temp files with mode 0600, and delete them
+    when finished with them.  [DPN]            
+</ul>
+
+<hr>
+<b><a href="tlily-1.0.1.tar.gz">Version 1.0.1</a></b> (Aug 12, 1998)<br>
+<ul>
+  <li> [extensions/parse.pl] Possible fix for an obscure parser bug.  [DPN]
+  <li> [extensions/view.pl, extensions/log.pl] IO::File bug fix [MJR]
+  <li> [LC/SubClient.pm] Fixed so it works again. [SMC]
+  <li> [LC/User.pm] Added % command abbreviation capability. [MJR]
+  <li> [extensions/set.pl] Added a return 0 to end of unset_handler() [MJR]
+  <li> [LC/UI.pm] Added customizable scroll up/down functions. [MJR]
+  <li> [extension/biff.pl] Minor tweaks and bug fixes. [MJR]
+  <li> [lilybot.PL] Extensive modifications.  Try the "help" command. [JDW]
+  <li> [extensions/biff.pl] Redesign and rewrite, added RPI lightweight POP
+    mail check support. [MJR]
+  <li> [LC/Extend.pm] Modified to work with ExoSafe.pm [MJR]
+  <li> [LC/ExoSafe.pm] New file - replaces Safe, providing namespace
+    seperation without the problems of Safe.pm [MJR]
+  <li> [Build.PL] Change version handling to accomodate new versioning [CWS]
+  <li> [LC/CTerminal.pm] Added definitions for the home and end keys. [CWS]
+  <li> [LC/UI.pm] Made home and end do something. [CWS]
+  <li> [extensions/startup.pl] added a %help. [CWS]
+  <li> [extensions/startup.pl] The Startup file is now lily/tlily commands,
+    processed as input events. [CWS]
+  <li> [LC/Event.pm] Corrected example and description for timed handlers.
+    Changed Code =&gt; Call. [CWS]
+  <li> [tlily.global] Added default for @prefer, and changed @slash's default
+    to (undef). [CWS]
+  <li> [LC/Config.pm] Upon finding an array type config var, if its value is
+    (undef), set the variable to be an empty list. [CWS]
+
+</ul>
+
+<hr>
+<b><a href="tlily-1.0.tar.gz">Version 1.0</a></b> (Jun 13, 1998)<br>
+<ul>
+  <li> [Build.PL] Change version handling to accomodate new versioning [CWS]
+  <li> [LC/CTerminal.pm] Added definitions for the home and end keys. [CWS]
+  <li> [LC/UI.pm] Made home and end do something. [CWS]
+  <li> [extensions/startup.pl] added a %help. [CWS]
+  <li> [extensions/startup.pl] The Startup file is now lily/tlily commands,
+    processed as input events. [CWS]
+  <li> [LC/Event.pm] Corrected example and description for timed handlers.
+    Changed Code => Call. [CWS]
+  <li> [tlily.global] Added default for @prefer, and changed
+    @slash's default to (undef). [CWS]
+  <li> [LC/Config.pm] Upon finding an array type config var, if its value is
+    (undef), set the variable to be an empty list. [CWS]
+  <li> [LC/State.pm] Fixed discussion substring expansion.  [DPN]
+  <li> [extensions/pipes.pl] Stop repeatedly writing to a closed handle.  [DPN]
+  <li> [LC/UI.pm] Fixed a bug when typing more than one line of input while a
+    prompt is visible.  (The "paste bug".)  [DPN]
+  <li> [extensions/helper.pl] Added a %helper extension for editing help text
+    with ?gethelp and ?sethelp [SMC]
+  <li> [extensions/source.pl] Added a %source extension to interpret a file as
+    a list of user commands [SMC]
+  <li> [LC/TTerminal.pm] Fixed so that you can load TTerminal with no
+     Term::Size and indeed no /etc/termcap :) [JDW]
+</ul>     
+	  
+<hr>
+<b><a href="tlily-0.9b.tar.gz">Version 0.9b</a></b> (Jun 4, 1998)<br>
+<ul>
+  <li> [LC/UI.pm] Possible fix for Josh's persistant prompt bug? [DPN]
+  <li> [extensions/expand.pl] Fixed a minor expansion bug. [DPN]
+  <li> [extensions/look.pl] Added some () messages to look. [JDW]
+  <li> [extensions/look.pl] Fix bug that passed non-alpha chars to look. [MJR]
+  <li> [LC/CTerminal.pm] Added definitions for the home and end keys. [CWS]
+  <li> [LC/UI.pm] Made home and end do something. [CWS]
+</ul>  
+    
+<hr>
+<b><a href="tlily-0.9a.tar.gz">Version 0.9a</a></b> (Jun 3, 1998)<br>
+<ul>
+  <li> [LC/Extend.pm] Better error handling, reporting. [DPN]
+  <li> [extensions/gag.pl] Made %gag work with the new ui_filter [SMC]
+  <li> [tlily.PL] Better error handling on failed connect to server. [DPN]
+  <li> [extensions/parse.pl] Eliminated spurious quoting of event elements. [DPN]
+  <li> [LC/StatusLine.pm] Fixed bug with UI chars in blurbs. [DPN]
+  <li> [LC/UI.pm] Added filters. [DPN]
+  <li> [LC/UI.pm, LC/User.pm, extensions/parse.pl] Pulled out tags code [DPN]
+  <li> [extensions/info.pl] Tiny change to properly clean up. [SMC]
+  <li> [misc] Added lilybot to distribution. [JDW]
+  <li> [LC/Client.pm] Separated from tlily.PL [JDW]
+  <li> [misc] Major hacks to make it possible to load tlily with no UI [JDW]
+  <li> [extensions/smartexit.pl] Made UI output "conformant" [()'s] [WJC]
+  <li> [extensions/gag.pl] Made UI output "conformant" [()'s] [WJC]
+  <li> [extensions/after.pl] Display shows time handler will go off,
+       added unload() to remove handlers set while extension was loaded. [WJC]
+</ul>			  
+
+<hr>
+<b><a href="tlily-0.8c.tar.gz">Version 0.8c</a></b> (May 27, 1998)<br>
+<ul>
+  <li> [extensions/parse.pl] Quick parser hack to survive the addition of
+       %beginmsg/%endmsg to emotes.  [DPN]
+  <li> [LC/NoTerminal.pm] Added NoTerminal terminal module for debugging and
+       porting. (what a hack ;) [JDW]
+  <li> [LC/Config.pm] Add -h and -host as synonyms for -server. [CWS]
+  <li> [extensions/zone.pl] Moved test for $zonetype and $zonedelta so users can
+       set them dynamically without reloading. [CWS]
+  <li> [extensions/set.pl] Removed %ENV/$TL_VERSION hack. [CWS]
+  <li> [LC/Config.pm] Fixed it so %ENV and $TL_VERSION are not included in
+       %config. [CWS]
+  <li> [extensions/autojoin.pl] New extension: automatically joins discussions
+       when they are created. Not loaded by default. [CWS]
+  <li> [extensions/countdown.pl] Allow the user to specify the formatting of
+       the time via $countdown_fmt. [CWS]
+  <li> [extensions/set.pl] Fixed some of the
+       regexps so as to allow setting of countdown_fmt. [CWS]
+  <li> [extension/set.pl] Added %unset and %show to
+       unset and display config variables, respectively. [CWS]
+</ul>		       
+
+<hr>
+<b><a href="tlily-0.8b.tar.gz">Version 0.8b</a></b> (May 20, 1998)<br>
+<ul>
+  <li> [extensions/parse.pl] Refixed parser to display the lily banner,
+       /infos, and /info sets properly.  Oy.  [DPN]
+  <li> [extensions/parse.pl] Fixed parser to display the lily banner
+       correctly [SMC]
+  <li> [extensions/misc.pl] Added support for !! to execute last !command [SMC]
+  <li> [LC/State.pm, extensions/expand.pl] Added emote_oops.  [DPN]
+  <li> [extensions/zone.pl, LC/StatusLine.pm] Fix overflows when $zonedelta or
+       $clockdelta pushes the time over 24 hours. [SMC]
+  <li> [LC/Extend.pm] Load extensions properly when a path is specified. [DPN]
+  <li> [extensions/after.pl] %after lists afterids.  %after cancel &lt;id&gt;
+       cancels an after. [CWS]
+  <li> [Build.PL] Allow the releaser to edit the announcement message. [CWS] 
+</ul>
+
+<hr>
+<b><a href="tlily-0.8a.tar.gz">Version 0.8a</a></b> (Apr 29, 1998)<br>
+<ul>
+  <li> [extensions/parse.pl] Parser tweak: handle private sends in /reviews. [DPN]
+  <li> [extensions/look.pl] Output in a columnar format, limit lines.  [DPN]
+  <li> [extensions/irc.pl] Extension using the SubClient interface to use irc from
+       within tigerlily. [JDW]
+  <li> [LC/SubClient.pm] Added support for subclients and the %irc command to
+       support dsirc as a subclient. [JDW&SMC]
+</ul>		      
+		      
+
+<hr>
+<b><a href="tlily-0.7b.tar.gz">Version 0.7b</a></b> (Apr 8, 1998)<br>
+<ul>
+  <li> [extensions/parse.pl] Fixed the stalls during /reviews (could be faster
+       still, though) [SMC]
+  <li> [extensions/set.pl] Make space the default separation character [CWS]
+  <li> [extensions/expand.pl, extensions/info.pl] Make changes to @slash
+       effective immediately  [CWS]
+  <li> [LC/Config.pm] Fixed some command line parsing problems that would
+       cause infinite loops  [CWS]
+  <li> [LC/State.pm] Handle 'me' as a destination.  [DPN]
+  <li> [extensions/parse.pl] Yet another attempt at making /info set work.  [DPN]
+  <li> [LC/parse.pm, extensions/parse.pl] Made the parser an extension.  [DPN]
+  <li> [tlily.PL] Catch SIGPIPE.  [DPN]
+  <li> [extensions/countdown.pl] Countdown timer on the statusline.  [DPN]
+  <li> [LC/User.pm] Fixed the laggy signals problem.  [DPN]
+</ul>	
+
+<hr>
+<b><a href="tlily-0.7a.tar.gz">Version 0.7a</a></b> (Mar 28, 1998)<br>
+<ul>
+  <li> [extensions/info.pl] Fixed /info override to correctly recognize /info [CWS]
+  <li> [extensions/info.pl] Fixed %info edit to only change the info if you made
+                         a change to the edit buffer [SMC]
+  <li> [extensions/info.pl] Added %export [JDW]
+  <li> [extensions/smartexit.pl] Fix recognition of /det and /bye [FeRD@RPI][CWS]
+  <li> [LC/Config.pm] Added some pod docs [CWS]
+  <li> [LC/UI.pm] Changed Paste mode keymapping to M-p to match documentation
+  <li> [README] Describe %color_attrs, %mono_attrs, and @slash better to prevent
+             faq's about how to make /info do what %info does and how to
+             set colors [CWS]
+  <li> [LC/Config.pm] callbacks on %config, $config{mono_attrs}, and
+                   $config{color_attrs} are now supported via
+                   register_config_callback() [CWS]
+  <li> [LC/Config.pm] %config, $config{mono_attrs}, and $config{color_attrs} are
+                   now tied hashes [CWS]
+  <li> [LC/UI.pm] When $config{mono} is toggled, change colors as
+               appropriate [CWS]
+  <li> [LC/UI.pm] When $config{color_attrs} or $config{mono_attrs} is changed,
+               do a ui_set() to change the color [CWS]
+  <li> [LC/Config.pm] When $config{load} or $config{slash} are updated, process
+                   them for '-' removals [CWS]
+  <li> [extensions/set.pl] Added %set command to help set %config vars [CWS]
+  <li> [Build.PL] Check to see if the user has the Curses and Term::Size
+               modules [CWS]
+  <li> [Build.PL] New option: -p &lt;dir&gt; specifies a prefix to use.  All other
+               related paths are derived from it. [CWS]
+  <li> [Build.PL] New target: uninstall: uninstalls tlily using the paths
+               in build.cache.  Does not uninstall site config file. [CWS]
+  <li> [Build.PL] At the end of release, prompt the developer to send an
+               announcement message to tigerlily-announce@einstein.to [CWS]
+  <li> [Build.PL] New target: announce: Allows developer to send a release
+               announcement asynchronously from the release [CWS]
+  <li> [Build.PL] Don't let non-developers try to release or announce [CWS]
+  <li> [extensions/url.pl] %url viewing code. [JDW]
+  <li> Lots of little changes to make tlily work better under -w.  [DPN]
+  <li> [LC/parse.pm] Fix to make emotes parse properly during a /review [SMC]
+  <li> [LC/UI.pm] moved gag code into the UI, so now we can ungag and see what 
+               was said [JDW]
+  <li> load vinfo by default, but send _no_ replies automatically. [JDW]
+  <li> [extensions/help.pl] modified %help prefix to ? instead of <li> [JDW]
+  <li> [extensions/autoreply.pl] modified autoreply and log to use the 
+               status line [JDW]
+  <li> [LC/StatusLine.pm] Reworked status line processing to allow extensions
+               to access the status line [JDW]
+</ul>
+
+<hr>
+<b><a href="tlily-0.6e.tar.gz">Version 0.6e</a></b> (Mar 25, 1998)<br>
+<ul>
+  <li> [LC/CTerminal.pm] Relaxed requirement for Term::Size to show warning [JDW]
+  <li> [extensions/info.pl] Added %help. [JDW]
+  <li> [extensions/view.pl] Fixed, improved %help. [JDW]
+  <li> [LC/Extend.pm] Added some additional output and error messages [JDW]
+  <li> [extensions/autoreply.pl] Added.  Automated responses to private sends [JDW]
+  <li> [extensions/look.pl]  Added a chomp() to remove exess newlines.  [DPN]
+  <li> [extensions/info.pl, tlily.global]  Added an 'editor' config var.  [DPN]
+  <li> [LC/State.pm] Added -f option to %sync.  [DPN]
+  <li> [extensions/help.pl] Tweaked help output.  [DPN]
+  <li> [extensions/pipes.pl]  Be careful of what you suggest... :&gt;  [DPN]
+  <li> [LC/parse.pm] Tweak for datestamps in reviews.  [DPN]
+  <li> [LC/parse.pm] Fix for signals in sends.  [DPN]
+  <li> [LC/State.pm] Make @prefer ignore case.  [DPN]
+</ul>
+  
+<hr>
+<b><a href="tlily-0.6d.tar.gz">Version 0.6d</a></b> (Mar 23, 1998)<br>
+<ul>
+  <li> [LC/UI.pm] Fixed the problem with newlines in output.  [DPN]
+  <li> [LC/UI.pm] Better error reporting when a terminal module fail.  [DPN]
+  <li> [LC/parse.pm] Bugfixes for parsing sends.  Removed quotewords.  [DPN]
+  <li> [LC/UI.pm] Added a "paste mode", in which newlines are mapped into spaces.
+       Use M-p to toggle it on and off.  [DPN]
+  <li> [LC/CTerminal.pm, LC/TTerminal.pm] Better handling of terminal resizes.
+  <li> We now require the Term::Size module.  [DPN]    
+</ul>
+
+<hr>
+<b><a href="tlily-0.6c.tar.gz">Version 0.6c</a></b> (Mar 17, 1998)<br>
+<ul>
+  <li> [LC/State.pm] Bugfix: handle renames properly.  [DPN]
+  <li> [LC/StatusLine.pm] Bugfix for blurbs containing a &lt; or \.  [DPN]
+  <li> [extensions/misc.pl] Added an %echo command.  [DPN]
+  <li> [LC/State.pm] New configuration variable: 'prefer'.  See the README.  [DPN]
+  <li> [extensions/hidesend.pl] New extension: don't display user's sends.
+        Useful for people with message_echo turned on.  [DPN]
+  <li> [*/*] Extended the way user input is handled; the parser now parses
+  <li> userinput events and generates events for different forms of input.
+  <li> The new events are: ccommand, scommand, usend, and uunknown.  [DPN]
+  <li> [LC/parse.pm] Fixed a bug involving the characters --&gt;
+       at the end of a line.  [DPN]
+  <li> [extensions/after.pl] Extension to run a command after a delay [CWS]
+</ul>      
+
+<hr>
+<b><a href="tlily-0.6b.tar.gz">Version 0.6b</a></b> (Mar 3, 1998)<br>
+<ul>
+  <li>[extensions/misc.pl] Fixed !command handling.  [DPN]
+  <li>[tlily.PL] Require perl 5.003_07.  [DPN]
+  <li>[LC/smartexit.pl] Extension to exit on disconnect iff the user did a
+      /det or /bye.  [DPN]
+  <li>[tlily.PL] Added $exit_on_disconnect variable. [DPN]
+  <li>[LC/parse.pm] Untested patch to make consulting sends work.  [DPN]
+  <li>[extensions/info.pl] Removed dependancy on IO::File.
+  <li>[LC/Config.pm, extensions/autologin.pl] Added the 'noauto' option, to
+      suppress autologin.  [DPN]
+  <li>[LC/Extend.pm, extensions/vinfo.pl] Added a 'vinfo' command, to allow
+      automatic transmission of version information.  (Disabled by default.)
+      [DPN]  
+</ul>
+
+<hr>
+<b><a href="tlily-0.6a.tar.gz">Version 0.6a</a></b> (Feb 17, 1998)<br>
+<ul>
+  <li> [README] Documented the terminal features.  [DPN]
+  <li> [LC/UI.pm, LC/CTerminal.pm, LC/TTerminal.pm, tlily.PL,
+       extensions/terminal.pl] Added support for multiple terminals.  [DPN]
+  <li> [extensions/misc.pl] Added %version command
+  <li> [extensions/expand.pl] Added a tab-ring (try starting at a blank line
+       and pressing tab a few times).  Added expansion after commas.  [DPN]
+  <li> [LC/parse.pm] Added a "Raw" field to events.  [DPN]
+  <li> [extensions/keepalive.pl] New extension -- pings the
+       server periodically to verify the connection state.  [DPN]
+  <li> [LC/parse.pm] Discovered a bit of leftover debugging output.  [DPN]      
+</ul>
+
+<hr>
+<b><a href="tlily-0.5c.tar.gz">Version 0.5c</a></b> (Jan 21, 1998)<br>
+<ul>
+  <li> [LC/Extend.pm] Permit extensions access to $@.  This makes life better
+    for the %eval command.  [DPN]
+</ul>
+
+<hr>
+<b>Version 0.5b</b> (source not available)<br>
+<ul>
+  <li> [LC/State.pm, LC/StatusLine.pm] Synchronization state appears on status
+    line.  [DPN]
+  <li> [LC/parse.pm] Fixed a parser bug involving < or \ in blurbs.  [DPN]
+  <li> [extensions/misc.pl] %eval prints the result of the eval'd expr.  [DPN]
+  <li> [extensions/info.pl] Fixed the breeding backslash bug.  [DPN]
+  <li> [extensions/zone.pl] Activate the zone extension if zonetype is set [CWS]
+  <li> [LC/Config.pm] Forgot a shift @ARGV in one of the if statements
+    processing the command line [CWS]
+  <li> [LC/Config.pm] the -m/-mono option wasn't being special-cased like
+    it should have been in the command line parser [CWS]
+  <li> [tlily.PL] the ?: construct to choose the mono/color choice hash
+    didn't work right -- yanked it out to a full if() stmt [CWS]
+</ul>
+
+<hr>
+<b>Version 0.5a</b> (source not available)<br>
+<ul>
+  <li> [Build.PL] Bugfix:  The perl library 'use lib (...' line shouldn't have
+    the trailing "/LC" on it [CWS]
+  <li> Mention 'perl Build.PL -h' in the README [CWS]
+  <li> [LC/Config.pm] The @load and @slash lists weren't being evaluated
+    correctly for "-" entries [CWS]
+  <li> [Build.PL] Add -f option to force overwrite when installing files.
+    It actually removes each existing file before installing the new
+    one [CWS]
+  <li> [Build.PL] When releasing, update the first line of the changelog to
+    reflect the version being released [CWS]
+  <li> Colors are now set from the %color_attrs and %mono_attrs arrays set
+    in the config files [CWS]
+</ul>
+
+<hr>
+<b>Version 0.5</b> (source not available)<br>
+<ul>
+  <li> Major Change:  Config files; See README for more details.  [CWS]
+  <li> [Build.PL] Improved version number handling. [CWS]
+  <li> [Build.PL] Added -i option to ignore the build cache. [CWS]
+  <li> [Build.PL] If the install dirs are for the current dir, ask the user
+    if they want to be re-asked for the paths. [CWS]
+  <li> [LC/UI.pm] Bugfix:  If ^W was pressed while in the middle of text, the
+    cursor wasn't repositioned properly. [CWS]
+  <li> [Build.PL] Instead of asking for separate dirs for the extensions and
+    library(LC), ask for 1 library dir that will contain the extensions,
+    library, and global config file, and one that will hold the site
+    config file.  [CWS]
+  <li> [extensions/zone.pl] If $zonetype is set to 12, timestamps will be
+    displayed in a 12 hour clock. [CWS]
+  <li> [LC/StatusLine.pm] If $clocktype is set to 12, the statusline clock will
+    be displayed in a 12 hour clock. [CWS]
+  <li> [LC/StatusLine.pm] If $clockdelta is set, the statusline clock will be
+    zonedelta-ed similar to what the zone module does for timestamps. [CWS]
+  <li> Autologin.  [DPN]
+  <li> Send collapsing.  [DPN]
+  <li> Trap SIGWINCH, and try to do something appropriate.  [DPN]
+  <li> Fixed a bug where the parse rules for discussions the user creates/
+    destroys weren't being applied properly.  [DPN]
+  <li> Fixed ludicrous bug involving terminal widths != 80 characters.  [DPN]
+  <li> Fixed problems with overly-long sendlists.  [DPN]
+  <li> Ctrl-c must be pressed twice within a 5-second period to exit.  [DPN]
+  <li> Fixed the bug that caused tlily to complain about a sysread() error.  [DPN]
+  <li> Auto-detect mono terminals.  [DPN]
+</ul>
+
+<b><a href="tlily-0.4a.tar.gz">Version 0.4a</a></b> (Dec 1, 1997)<br>
+<ul>
+<li>Bugfix: The handler registering functions were not returning the correct
+    ID to extensions.  [DPN]
+<li>Added prompt handing on the input line.  [DPN]
+<li>Complete rewrite of the text window code.  It should now be significantly
+    faster.  [DPN]
+<li>Extensions to load may now be specified by either a filename, or just
+    an extension name.  If just an extension name is used, then the
+    extension search path will be used.  [DPN]
+<li>Changed page up/down to M-v/C-v. [DPN]
+<li>Meta keys now function.  [DPN]
+<li>[extensions/look.pl] Removed debugging 'foo' printf. [CWS]
+<li>[Build.PL] Added -c option to use current directories. [CWS]
+<li>[extensions/startup.pl] New extension; snarfs ~/.lily/tlily/Startup
+    on a connected event. [CWS]
+<li>[tlily.PL] Played with login stuff so client options are sent at the
+    blurb prompt and, therefore, we get the %connected option at RPI. [CWS]
+<li>[LC/Event.pm] Fixed documentation;  dispatch_event takes 1 arg, a
+    hashref. [CWS]
+<li>[extensions/look.pl] Look extension: perform a look(1) on the word under
+    the cursor.  [DPN]
+<li>[LC/StatusLine.pm] Added a clock.  [DPN]
+<li>[LC/Event.pm, LC/Extend.pm] Added support for I/O and timed events.  [DPN]
+<li>[extensions/expand.pl] added code to reset the sendlist more appropriately
+    when /oops-ing or /also-ing; enabled with $config{oops} and $config{also};
+    when set to "/", intercepts /oops and /also, when set to "%", adds
+    commands %oops and %also, when set to "/%" or "%/", does both. [CWS]
+<li>[tlily.PL] Commented out some unused variables and fixed some typos to
+    make perl -w happier. [CWS]
+<li>The parser should now catch sends from the user.  (<< and <-)  [DPN]
+<li>Parser bug fix: *** (10:00) User has attached *** was parsed incorrectly
+    if the date was in there.  [DPN]
+<li>[tlily.PL] Fixed bug which caused ~/.lily/tlily/init not to be read. [CWS]
+<li>[Build.PL] Tells you how to install when you only make tlily and
+    your directories aren't the current dir. [CWS]
+<li>[Build.PL] Now accepts 'tlily' as a target on the command line. [CWS]
+<li>[Build.PL] Tilde(~) expansion will be done on all paths entered by the
+    user. [CWS]
+</ul>
+
+<b><a href="tlily-0.3b.tar.gz">Version 0.3b</a></b> (Nov 3, 1997)<br>
+<ul>
+<li>Moved !command and %eval into an extension, and fixed a !cmd bug.  [DPN]
+<li>Fixed the unknown-command-sent-to-server bug.  [DPN]
+<li>Fixed the slow-more-update bug.  [DPN]
+<li>Zone extension: fixed the negative-time bug.  [DPN]
+<li>Minor UI bugfix involving the input line's attributes.  [DPN]
+<li>The Build script will now cache whether the directories in the cache file are for the local directory, and warn you not to do an install. [CWS]
+<li>If you try to install while your cached directories are for the local directory, the Build script asks you if you really want to install. [CWS]
+<li>The Build script explains better about the module library directory (that you shouldn't add the trailing /LC) when asking for it) [CWS]
+</ul>
+
+<b><a href="tlily-0.3a.tar.gz">Version 0.3a</a></b> (Nov 1, 1997)<br>
+<ul>
+<li>Build script now asks what paths you want to use and caches them, rather than making you edit Build.PL to set them.
+<li>Build script makes all generated files read-only to discourage editing.
+<li>perl Build.PL release now works.
+<li>Sendgroup expansion (=) now works.
+<li>Extensions may be loaded and unloaded during a lily session.
+<li>Timezone rewriting works again, through the 'zone' extension.
+<li>Groups are supported (the expander knows about them).
+<li>-- MORE -- works.
+<li>The password does not appear in the command history.
+<li>Command handlers' arguments' no longer have trailing whitespace.  (As of 0.2c, they were receiving a terminating \n, which made just about every command handler break.)
+</ul>
+
+<b><a href="tlily-0.2a.tar.gz">Version 0.2a</a></b> (Oct 24, 1997)<br>
+<ul>
+<li>/info edit
+<li>complete redesign of parsing engine and event handling.
+<li>here/away status on status line.
+</ul>
+
+<b><a href="tlily-0.1f.tar.gz">Version 0.1f</a></b> (Oct 11, 1997)<br>
+<ul>
+<li>full /who and /what parsing
+<li>tab completion
+</ul>
+
+<hr>
+<b><a href="tlily-0.1e.tar.gz">Version 0.1e</a></b> (Oct 9, 1997)<br>
+<ul>
+<li> Help now mentions -zonedelta option.
+<li> A few more server messages are recognized, thanks to Silent Bob.
+<li> Network input routines are rewritten.
+<li> A truly obscure bug involving printing the sequence '\<' is now fixed.
+<li> Gagging is implemented: %gag &lt;user&gt;
+<li> Perl code now requires %eval &lt;code&gt;, instead of just %code.
+</ul>
+
+<hr>
+<b><a href="tlily-0.1d.tar.gz">Version 0.1d</a></b><br>
+<ul>
+<li>password no longer echos.
+<li>user-entered text now has an attribute
+<li>timezone rewriting added
+</ul>
+
+<hr>
+<b><a href="tlily-0.1c.tar.gz">Version 0.1c</a></b><br>
+<ul>
+<li>Silly me.  I made a foolish error when merging Josh's info patch.  Fixed.
+<li> /info set now works for discussions.  Really.
+</ul>
+
+<hr>
+<b><a href="tlily-0.1b.tar.gz">Version 0.1b</a></b><br>
+<ul>
+<li> /info set now works for discussions.
+<li> Private messages to multiple destinations are parsed correctly.
+<li> C-d deletes the character following the cursor.
+<li> Turning your blurb off is noticed.
+<li> C-w deletes the word preceding the cursor.
+<li> The status line is drawn in reverse when in mono mode.
+<li> C-u now repositions the cursor properly.
+<li> Internal handling of control characters is cleaner.
+<li> Backslashes are no longer invisible.
+</ul>
+
+<hr>
+<b><A HREF="tlily-0.1a.tar.gz">Version 0.1a</A></b><br>
+<ul>
+<li>It has many, many bugs.  Tell us about them.
+</ul>
+
+<hr>
+<b><A HREF="tlily-prehistoric.tar.gz">Version ???</A></b> (Sep 16, 1997)<br>
+<ul>
+<li>I found this really old version of the code from before it was really
+even tlily.
+</ul>
+
+<hr>
+
+</BODY>
+
+</HTML>

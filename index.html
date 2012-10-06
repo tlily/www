@@ -1,0 +1,108 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+    <head>
+        <title>TigerLily: Feel Free!</title>
+        <style type="text/css">
+            body    { background-color: white }
+            h1      { text-align: center }
+            div     { margin-top: 1em; }
+            .tlily  {
+                text-decoration:underline;
+                font-size: large;
+                text-transform: uppercase
+            }
+            .alert  { color: red }
+            .footer { font-style: italic; margin-top: 2em;}
+        </style>
+    </head>
+    <body>
+        <div style="float: right">
+            <img src="tiger.gif" alt="tigerlily logo" />
+        </div>
+        <div class="tlily">
+            <span style="font-size: larger">T</span>igerlily:
+            the perl lily client
+        </div>
+        <div>
+            <span style="font-weight:bold">Current Versions:</span>
+            <ul>
+                <li><a href="tlily-2.5.2.tar.gz">tlily-2.5.2.tar.gz</a> (SLCP)</li>
+                <li><a href="tlily-2.5.2-curses.plx.gz">tlily-2.5.2-curses.plx.gz</a> (SLCP, single-file install, curses UI)</li>
+                <li><a href="tlily-2.5.2-tk.plx.gz">tlily-2.5.2-tk.plx.gz</a> (SLCP, single-file install, Tk UI)</li>
+                <li><a href="tlily-2.5.2-win32.plx.gz">tlily-2.5.2-win32.plx.gz</a> (SLCP, single-file install, Win32)</li>
+                <li><span style="font-size: smaller">(<a href="tlily-snap.gif">screen shot</a>)</span></li>
+            </ul> 
+        </div>
+
+        <hr />
+
+        <h1>Tigerlily 2.5.2 has been released!</h1>
+
+        <div>
+            Tigerlily 2.5.2 is a bug fix release that addresses two critical
+            issues:
+            <ul>
+                <li>SSL support did not work reliably in 2.5.1</li>
+                <li>The <code>Makefile.PL</code> did not work with Perl 5.8.8.</li>
+            </ul>
+            Tigerlily 2.5.1 features SSL support, Win32 improvements, window
+            resize fixes for curses UI, internal help system fixes (now works
+            in single-file versions), several new extensions, and numerous
+            bugfixes.
+        </div>
+
+        <div>
+            As of 2.4, Tigerlily runs under ActiveState Perl on Windows out
+            of the box.
+        </div>
+   
+        <hr />
+
+        <h1>What is Tigerlily?</h1>
+
+        <div>
+            Tigerlily is a <a href="http://lilycore.sf.net/">lily client</a>
+            written in perl.  It has the following nifty features:
+            <ul>
+                <li>colorization, scrollback, status bar</li>
+                <li>info and memo editing via an external editor</li>
+                <li>extensibility</li>
+                <li>Customizable UI (Change colors, formats, key-bindings, etc.)</li>
+                <li>A Lily core programming extension</li>
+                <li>"Feel Free" to add anything else you need :-)</li>
+            </ul>
+        </div>
+
+        <hr />
+
+        <div>
+            Tigerlily requires the following to run:
+            <ul>
+                <li>Perl 5.6.1+</li>
+                <li><a href="http://search.cpan.org/~giraffed/Curses/Curses.pm"><code>Curses.pm</code></a></li>
+            </ul>
+        </div>
+
+        <hr />
+
+        <div>
+            If you find bugs in tlily, you can browse the
+            <a href="http://code.google.com/p/tlily/issues/list">bug tracking
+            system</a> and report them.
+        </div>
+
+    
+        <div>
+            You can <a href="http://code.google.com/p/tlily/source/browse/">
+            browse the svn respository</a> or
+            <a href="http://code.google.com/p/tlily/source/checkout">checkout
+            a copy</a>.  Tigerlily uses
+            <a href="http://subversion.tigris.org/">Subversion</a> as its
+            source control system.
+        </div>
+
+        <div class="footer">Last Updated: January 14, 2010</div>
+
+    </body>
+</html>
