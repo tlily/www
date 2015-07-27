@@ -1,2 +1,4 @@
 RewriteEngine on
 RewriteRule ^tigerlily(.*) http://www.tlily.org$1 [R]
+
+RedirectMatch 404 /\.git
